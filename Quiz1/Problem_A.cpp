@@ -4,6 +4,9 @@
 # include <math.h>
 # include <bit>
 # include <bitset>
+# include <cuda_fp16.h>
+
+# define fp16_t __half
 
 using namespace std;
 
@@ -25,7 +28,7 @@ static inline uint32_t fp32_to_bits(float f)
     return fp32.as_bits;
 }
 
-static inline float fp16_to_fp32(uint16_t h)
+static inline float fp16_to_fp32(fp16_t h)
 {
     const uint32_t w = (uint32_t) h << 16;
     const uint32_t sign = w & UINT32_C(0x80000000);
@@ -48,7 +51,7 @@ static inline float fp16_to_fp32(uint16_t h)
     return bits_to_fp32(result);
 }
 
-static inline uint16_t fp32_to_fp16(float f)
+static inline fp16_t fp32_to_fp16(float f)
 {
     const float scale_to_inf = 0x1.0p+112f;
     const float scale_to_zero = 0x1.0p-110f;
